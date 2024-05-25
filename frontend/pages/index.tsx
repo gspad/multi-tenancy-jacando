@@ -1,22 +1,22 @@
 import { useState, FormEvent } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 
-const Login = () => {
+const Home = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [token, setToken] = useState('');
+    const [error, setError] = useState('');
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const tenant = searchParams.get('tenant');
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`/api/${tenant}/login-step1`, { email, password });
+            const response = await axios.post(`/api/login-step1`, { email, password });
+            const { tenant } = response.data;
             router.push(`/${tenant}/2fa?email=${encodeURIComponent(email)}`);
         } catch (error) {
             console.error(error);
+            setError('Invalid email or password');
         }
     };
 
@@ -40,8 +40,9 @@ const Login = () => {
                 />
                 <button type="submit">Next</button>
             </form>
+            {error && <p>{error}</p>}
         </div>
     );
 };
 
-export default Login;
+export default Home;

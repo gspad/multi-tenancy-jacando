@@ -13,6 +13,8 @@ services:
       context: ./auth
       dockerfile: Dockerfile
     container_name: auth-service
+    ports:
+      - '3001:3001'
     depends_on:
       - mongodb
     environment:
@@ -23,6 +25,8 @@ services:
       context: ./user
       dockerfile: Dockerfile
     container_name: user-service
+    ports:
+      - '3002:3002'
     depends_on:
       - mongodb
     environment:
@@ -33,19 +37,22 @@ services:
       context: ./gateway
       dockerfile: Dockerfile
     container_name: gateway-service
+    ports:
+      - '3000:3000'
     depends_on:
       - auth-service
       - user-service
-    ports:
-      - '3000:3002'
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:3001
+      - USER_SERVICE_URL=http://user-service:3002
 
-  frontend:
+  frontend-service:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - '3001:3003'
+      - '3003:3000'
     depends_on:
       - gateway-service
 
