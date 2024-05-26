@@ -6,8 +6,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         const response = await axios.post(`http://gateway-service:3000/api/auth/login-step1`, { email, password });
-        const { tenant } = response.data;
-        res.status(200).json({ tenant });
+        const { message } = response.data;
+        res.status(response.status).json({ message });
     } catch (error: any) {
         res.status(error.response?.status || 500).json({ error: error.message });
     }
