@@ -8,29 +8,15 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  auth-service:
+  config-service:
     build:
-      context: ./auth
+      context: ./config-service
       dockerfile: Dockerfile
-    container_name: auth-service
-    ports:
-      - '3001:3001'
-    depends_on:
-      - mongodb
+    container_name: config-service
     environment:
-      - MONGO_URI=mongodb://mongodb:27017
-
-  user-service:
-    build:
-      context: ./user
-      dockerfile: Dockerfile
-    container_name: user-service
+      - CONFIG_SERVICE_PORT=4000
     ports:
-      - '3002:3002'
-    depends_on:
-      - mongodb
-    environment:
-      - MONGO_URI=mongodb://mongodb:27017
+      - '4000:4000'
 
   gateway-service:
     build:
@@ -45,6 +31,33 @@ services:
     environment:
       - AUTH_SERVICE_URL=http://auth-service:3001
       - USER_SERVICE_URL=http://user-service:3002
+      - CONFIG_SERVICE_URL=http://config-service:4000
+
+  auth-service:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - '3001:3001'
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+      - CONFIG_SERVICE_URL=http://config-service:4000
+
+  user-service:
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - '3002:3002'
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+      - CONFIG_SERVICE_URL=http://config-service:4000
 
   frontend-service:
     build:

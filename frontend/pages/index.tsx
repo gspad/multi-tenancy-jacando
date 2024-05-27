@@ -39,14 +39,6 @@ const Home = () => {
                     required
                 />
                 <button type="submit">Next</button>
-                <input
-                    type="text"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    placeholder="Phone Number"
-                    required
-                />
-                <button type="submit">Next</button>
             </form>
             {error && <p>{error}</p>}
         </div>

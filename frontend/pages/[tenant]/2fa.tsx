@@ -1,24 +1,22 @@
-import { useState, FormEvent } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
-const TwoFA = () => {
-    const [token, setToken] = useState('');
+const LoginStep2 = () => {
+    const [twoFactorCode, setTwoFactorCode] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
-    const tenant = useSearchParams().get('tenant');
-    const email = useSearchParams().get('email');
+    const { tenant, email } = router.query;
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`/api/login-step2`, { email, token });
-            if (response.status === 200) {
-                router.push(`/${tenant}/protected`);
-            }
-        } catch (error) {
-            console.error(error);
-            setError('Invalid 2FA token');
+            const response = await axios.post(`/api/${tenant}/login-step2`, { email, token: twoFactorCode });
+            Cookies.set('jwt', response.data.jwt, { path: '/' });
+            router.push(`/${tenant}/protected`);
+        } catch (error: any) {
+            setError('Invalid 2FA code');
         }
     };
 
@@ -28,16 +26,17 @@ const TwoFA = () => {
             <form onSubmit={handleSubmit}>
                 <input
                     type="text"
-                    value={token}
-                    onChange={(e) => setToken(e.target.value)}
-                    placeholder="2FA Token"
+                    value={twoFactorCode}
+                    onChange={(e) => setTwoFactorCode(e.target.value)}
+                    placeholder="Enter 2FA code"
                     required
                 />
-                <button type="submit">Login</button>
+                <button type="submit">Verify</button>
             </form>
             {error && <p>{error}</p>}
         </div>
     );
 };
 
-export default TwoFA;
+export default LoginStep2;
+
