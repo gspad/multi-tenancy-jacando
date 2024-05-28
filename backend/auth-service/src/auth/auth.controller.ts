@@ -10,10 +10,8 @@ export class AuthController {
     async login(@Body() body: { email: string; password: string }, @Res() res: Response) {
         try {
             const result = await this.authService.login(body.email, body.password);
-            if (result.jwt) {
-                res.cookie('token', result.jwt, { httpOnly: true, secure: true });
-                return res.status(200).json({ message: 'Login successful' });
-            } else if (result.qrCode) {
+
+            if (result.qrCode) {
                 return res.status(200).json({ message: result.message, qrCode: result.qrCode });
             } else {
                 return res.status(200).json({ message: result.message });

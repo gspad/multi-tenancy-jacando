@@ -7,7 +7,7 @@ interface User {
     email: string;
 }
 
-const Protected = () => {
+const Users = () => {
     const [users, setUsers] = useState<User[]>([]);
     const router = useRouter();
     const { tenant } = router.query;
@@ -42,4 +42,4 @@ const Protected = () => {
     );
 };
 
-export default Protected;
+export default Users;
