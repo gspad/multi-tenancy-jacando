@@ -9,7 +9,7 @@ export class AuthController {
     @Post('login')
     async login(@Body() body: any) {
         const response = await lastValueFrom(this.authService.login(body));
-        return { message: response.data.message, qrCode: response.data.qrCode };
+        return { message: response.data.message, qrCode: response.data.qrCode, tenant: response.data.tenant };
     }
 
     @Post('verify-totp')

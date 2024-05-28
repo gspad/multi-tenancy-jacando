@@ -1,7 +1,7 @@
 export const tenantConfig = [
     {
         tenant: 'jacando',
-        emailDomain: 'tenant1.com',
+        emailDomain: 'jacando.com',
     },
     {
         tenant: 'gmail',

@@ -12,7 +12,7 @@ export class AuthController {
             const result = await this.authService.login(body.email, body.password);
 
             if (result.qrCode) {
-                return res.status(200).json({ message: result.message, qrCode: result.qrCode });
+                return res.status(200).json({ message: result.message, qrCode: result.qrCode, tenant: result.tenant });
             } else {
                 return res.status(200).json({ message: result.message });
             }

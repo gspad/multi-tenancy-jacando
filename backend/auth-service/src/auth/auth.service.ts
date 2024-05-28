@@ -58,7 +58,7 @@ export class AuthService {
         }
 
         const { qrCode } = await this.generateTOTPSecret(email);
-        return { message: '2FA not set up', qrCode };
+        return { message: '2FA not set up', qrCode, tenant: user.tenant };
     }
 
     async comparePasswords(password: string, storedPasswordHash: string): Promise<boolean> {

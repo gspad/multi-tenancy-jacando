@@ -10,7 +10,7 @@ const userSchema = new Schema({
 });
 
 async function checkUsers() {
-    const connection = await mongoose.connect('mongodb://localhost:27017/gmail', { useNewUrlParser: true, useUnifiedTopology: true });
+    const connection = await mongoose.connect('mongodb://localhost:27017/jacando', { useNewUrlParser: true, useUnifiedTopology: true });
     const User = connection.model('User', userSchema);
 
     const users = await User.find();
