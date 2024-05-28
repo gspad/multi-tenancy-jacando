@@ -15,7 +15,7 @@ const Verify2FA = () => {
         try {
             const response = await axios.post('/api/auth/verify-totp', { email, token }, { withCredentials: true });
             if (response.data.message === '2FA successful') {
-                router.push('/users');
+                router.push('/protected');
             }
         } catch (error: any) {
             setError('Invalid 2FA token');

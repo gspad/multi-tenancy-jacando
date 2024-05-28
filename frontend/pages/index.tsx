@@ -25,7 +25,7 @@ const Login = () => {
                     query: { email, qrCode, tenant },
                 });
             } else if (message === 'Login successful') {
-                router.push('/users');
+                router.push('/protected');
             } else {
                 setError(response.data.message);
             }
