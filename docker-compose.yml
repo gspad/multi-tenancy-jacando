@@ -20,7 +20,7 @@ services:
 
   gateway-service:
     build:
-      context: ./gateway
+      context: ./gateway-service
       dockerfile: Dockerfile
     container_name: gateway-service
     ports:
@@ -35,11 +35,11 @@ services:
 
   auth-service:
     build:
-      context: ./auth
+      context: ./auth-service
       dockerfile: Dockerfile
     container_name: auth-service
     ports:
-      - '3001:3001'
+      - '3001:3000'
     depends_on:
       - mongodb
     environment:
@@ -48,7 +48,7 @@ services:
 
   user-service:
     build:
-      context: ./user
+      context: ./user-service
       dockerfile: Dockerfile
     container_name: user-service
     ports:

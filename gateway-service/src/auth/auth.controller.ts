@@ -6,15 +6,15 @@ import { lastValueFrom } from 'rxjs';
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
 
-    @Post('login-step1')
-    async loginStep1(@Body() body: any) {
-        const response = await lastValueFrom(this.authService.loginStep1(body));
-        return { message: response.data.message, tenant: response.data.tenant };
+    @Post('login')
+    async login(@Body() body: any) {
+        const response = await lastValueFrom(this.authService.login(body));
+        return { message: response.data.message, qrCode: response.data.qrCode };
     }
 
-    @Post('login-step2')
-    async loginStep2(@Body() body: any) {
-        const response = await lastValueFrom(this.authService.loginStep2(body));
+    @Post('verify-totp')
+    async verifyTotp(@Body() body: any) {
+        const response = await lastValueFrom(this.authService.verifyTotp(body));
         return response.data;
     }
 }

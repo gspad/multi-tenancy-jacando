@@ -1,8 +1,10 @@
-import { useState, FormEvent } from 'react';
-import { useRouter } from 'next/router';
-import axios from 'axios';
+// pages/login.tsx
 
-const Home = () => {
+import { useState, FormEvent } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -10,12 +12,24 @@ const Home = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+
         try {
-            const response = await axios.post(`/api/login-step1`, { email, password });
-            const { tenant } = response.data;
-            router.push(`/${tenant}/2fa?email=${encodeURIComponent(email)}`);
-        } catch (error) {
-            console.error(error);
+            const response = await axios.post('/api/auth/login', { email, password }, { withCredentials: true });
+            const { message, qrCode, tenant } = response.data;
+
+            // the fields to check for should be either some boolean or status fields instead of these brittle strings, 
+            // i.e. { requires2FA: boolean } or { status: '2FA_REQUIRED' }
+            if (message === '2FA required' || message === '2FA not set up') {
+                router.push({
+                    pathname: `${tenant}/verify-2fa`,
+                    query: { email, qrCode, tenant },
+                });
+            } else if (message === 'Login successful') {
+                router.push('/protected');
+            } else {
+                setError(response.data.message);
+            }
+        } catch (error: any) {
             setError('Invalid email or password');
         }
     };
@@ -38,11 +52,11 @@ const Home = () => {
                     placeholder="Password"
                     required
                 />
-                <button type="submit">Next</button>
+                <button type="submit">Login</button>
             </form>
             {error && <p>{error}</p>}
         </div>
     );
 };
 
-export default Home;
+export default Login;

@@ -7,11 +7,12 @@ import { Observable, of } from 'rxjs';
 export class AuthService {
     constructor(private readonly httpService: HttpService) { }
 
-    loginStep1(body: any): Observable<AxiosResponse<any>> {
-        return this.httpService.post(`http://auth-service:3001/api/auth/login-step1`, body);
+    login(body: any): Observable<AxiosResponse<any>> {
+        const res = this.httpService.post(`http://auth-service:3000/auth/login`, body);
+        return res;
     }
 
-    loginStep2(body: any): Observable<AxiosResponse<any>> {
-        return this.httpService.post(`http://auth-service:3001/api/auth/login-step2`, body);
+    verifyTotp(body: any): Observable<AxiosResponse<any>> {
+        return this.httpService.post(`http://auth-service:3000/auth/verify-totp`, body);
     }
 }

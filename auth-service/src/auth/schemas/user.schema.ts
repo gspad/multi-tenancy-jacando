@@ -4,5 +4,6 @@ export const UserSchema = new Schema({
     email: String,
     password: String,
     tenant: String,
-    twoFactorCode: String,
+    twoFactorSecret: String,
+    twoFactorEnabled: { type: Boolean, default: false },
 });
